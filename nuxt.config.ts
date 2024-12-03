@@ -7,7 +7,7 @@ export default defineNuxtConfig({
       websocket: true,
       asyncContext: true
     },
-    preset: 'cloudflare-worker'
+    preset: 'cloudflare-pages'
   },
   devServer: {
     port: 6051
