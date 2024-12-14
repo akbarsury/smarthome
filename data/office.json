@@ -1,0 +1,28 @@
+[
+  {
+    "name": "hidupkan komputer",
+    "io": "1",
+    "type": "push",
+    "push": {
+      "time": 1000
+    },
+    "rules": {
+      "forceOn": false,
+      "forceOff": false
+    },
+    "icon": "mi:computer"
+  },
+  {
+    "name": "nyalakan lampu",
+    "io": "1",
+    "type": "push",
+    "push": {
+      "time": 1000
+    },
+    "rules": {
+      "forceOn": false,
+      "forceOff": false
+    },
+    "icon": "mi:storm"
+  }
+]

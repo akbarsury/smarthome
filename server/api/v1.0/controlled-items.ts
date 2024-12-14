@@ -1,4 +1,4 @@
-import { controledItems } from "../database/drizzle/schema"
+import { controledItems } from "../../database/drizzle/schema"
 
 export default defineEventHandler(async (event) => {
     const db = useD1Cloudflare(event, "D1_DB")
