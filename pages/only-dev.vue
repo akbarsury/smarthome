@@ -30,34 +30,11 @@ import type { UseWebSocketReturn } from "@vueuse/core/index.js";
 const socket: globalThis.Ref<UseWebSocketReturn<any> | undefined> =
   ref(undefined);
 
-const messageString = ref("{}");
-
 const controlledItems: globalThis.Ref<any[]> = ref([]);
 
 const sendMessage = (message: string) => {
   if (socket.value) {
     socket.value.send(message);
-  }
-};
-
-const handleSocketResponse = (message: string) => {
-  const handler = message.split("::");
-  switch (handler[0]) {
-    case "ResponsObject":
-      break;
-    case "ResponsArray":
-      switch (handler[1]) {
-        case "controlledItems":
-          console.log(JSON.parse(handler[2]));
-          controlledItems.value = JSON.parse(handler[2]);
-          break;
-        default:
-          break;
-      }
-      break;
-
-    default:
-      break;
   }
 };
 
@@ -73,10 +50,10 @@ onMounted(() => {
       reloadNuxtApp();
     },
     onMessage(ws, event) {
-      messageString.value = event.data;
-      console.log(`message from server : ${messageString.value};`);
-      logMessages.value.push(messageString.value);
-      handleSocketResponse(messageString.value);
+      if (typeof event.data === "string") {
+        logMessages.value.push(event.data);
+        const data = useSmarthomeWebsocket().messageHandler(event.data);
+      }
     },
     autoReconnect: {
       retries: 3,

@@ -1,33 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import { type Hooks, type Peer } from "crossws"
-import { existsSync, mkdirSync } from 'node:fs';
-
-const getControlledItems = async (unit: string) => {
-    let data: string = '';
-    try {
-        try {
-            if (!existsSync("./data")) {
-                mkdirSync("./data");
-            }
-        } finally { }
-        data = await readFile(`./data/${unit}.json`, 'utf-8').then((data) => {
-            return data
-        }).catch(async (err) => {
-            data = await writeFile(`./data/${unit}.json`, JSON.stringify([])).then(async () => { return '' })
-            return data
-        })
-    } catch (err) {
-        data = await writeFile(`./data/${unit}.json`, JSON.stringify([])).then(async () => { return '' })
-        return data
-    } finally {
-        if (data === '') {
-            data = await readFile(`./data/${unit}.json`, 'utf-8').then((data) => {
-                return data
-            })
-        }
-        return data;
-    }
-}
+import { getControlledItems } from "./controlledItems"
 
 export class SmarthomeWebsocket {
     constructor(unit: string) {
@@ -48,20 +20,22 @@ export class SmarthomeWebsocket {
     }[];
 
     clientOpenConnection = (peer: Peer) => {
+        this.clientToInit
         this.clientToInit.push(peer.id)
     }
 
-    clientInit = (peer: Peer) => {
+    clientInit = async (peer: Peer) => {
         //
         console.log({ 'client to ini length': this.clientToInit.length });
         //
         this.clientToInit.splice(
-            this.clientToInit.indexOf(peer.id), 1
+            this.clientToInit.indexOf(peer.id), this.clientToInit.length >= 11 ? 11 : 1
         );
-        peer.subscribe('client');
         //
         console.log({ 'client to ini length': this.clientToInit.length });
         //
+        peer.subscribe('client');
+        peer.send(`Response-object::controlledItems::${JSON.stringify(await getControlledItems(this.unit))}`)
     }
 
     isClientInitiated = async (peer: Peer): Promise<boolean> => {
@@ -105,13 +79,25 @@ export class SmarthomeWebsocket {
         const _default = async (): Promise<string | undefined> => {
             const handler = message.split("::")
 
+            if (process.env.NODE_ENV === 'development' && (handler[0] === 'Send-to-node' || handler[0] === 'Publish-to-client')) {
+                if (this.nodePeer && handler[0] === 'Send-to-node') {
+                    this.nodePeer.send(handler[1])
+                } else if (handler[0] === 'Publish-to-client') {
+                    peer.publish('client', message)
+                }
+                return undefined
+            }
+
+
             if (peer === this.nodePeer || handler[0] === 'Assign-node-server') {
                 return (await node())
             }
 
             if (handler[0] === 'Client-init' || await this.isClientInitiated(peer)) {
-                return (await client(peer, message))
+                return (await client())
             }
+
+
 
             else {
                 peer.send("Client-not-initiated");
@@ -129,14 +115,22 @@ export class SmarthomeWebsocket {
                     }
                     return undefined
                 // ResponseTask::id::%{response_task_code}
-                case 'ResponseTask':
+                case 'Response-task':
+                    return undefined
+                // tes send to client
+                case 'Sync':
+                    console.log(
+                        '// tes send to client'
+                    );
+                    peer.publish('client', message)
+
                     return undefined
                 default:
                     return undefined
             }
         }
 
-        const client = async (peer: Peer, message: string): Promise<string | undefined> => {
+        const client = async (): Promise<string | undefined> => {
             const handler = message.split("::")
             switch (handler[0]) {
                 case 'Client-init':
@@ -145,13 +139,6 @@ export class SmarthomeWebsocket {
                 // Job::id::%{job_object_JSON}:
                 case 'Job':
                     server().handleJob();
-                    return undefined
-                // ResponseTask::id::%{response_task_code}
-                case 'ResponseObject':
-                    return undefined
-                case 'ResponseArray':
-                    return undefined
-                case 'ResponseJob':
                     return undefined
                 default:
                     return undefined

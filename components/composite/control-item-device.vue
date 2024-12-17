@@ -1,8 +1,8 @@
 <template>
-  <div
-    class="h-[170px] max-h-[170px] bg-orange-100 border border-orange-300 rounded-lg p-6"
-  >
-    <div class="flex flex-col items-center gap-2">
+  <div class="bg-orange-100 border border-orange-300 rounded-lg p-4">
+    <div
+      class="flex flex-col h-[120px] max-h-[120px] justify-center items-center gap-2"
+    >
       <div>
         <Icon
           :name="props.icon"
@@ -12,13 +12,13 @@
       </div>
       <div class="w-[120px]">
         <span
-          class="block text-center font-bold capitalize whitespace-nowrap truncate max-w-[120px]"
+          class="block text-center font-semibold capitalize whitespace-nowrap truncate max-w-[120px]"
         >
           {{ props.name }}
         </span>
       </div>
       <div>
-        <button
+        <!-- <button
           @click.prevent="action()"
           :class="[
             status == 'on' ? 'bg-orange-400' : 'bg-orange-200',
@@ -26,7 +26,7 @@
           ]"
         >
           {{ status !== "on" ? "Turn On" : "Turn Off" }}
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
