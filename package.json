@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "build-release": "nuxt build && rsync -avu --delete .output .build/",
     "cf:build": "nuxt build --preset cloudflare-pages",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
