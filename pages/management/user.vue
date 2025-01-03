@@ -1,7 +1,5 @@
 <template>
-  <NuxtLayout name="controller">
-    <NuxtPage />
-  </NuxtLayout>
+  <div>Manajemen user</div>
 </template>
 
 <script setup lang="ts"></script>

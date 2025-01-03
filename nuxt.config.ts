@@ -8,7 +8,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     experimental: {
-      websocket: true
+      websocket: true,
+      asyncContext: true
     },
   },
   devServer: {
@@ -20,9 +21,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     authSecret: '123!0-21n',
     authOrigin: 'http://localhost:3000',
-    wsNodeCredential: "xxx",
+    nodeCredential: "xxx",
     public: {
-      wsNodeCredential: "xxx"
+      nodeSerialNumber: "xxx"
     }
   },
   modules: [

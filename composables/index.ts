@@ -1,1 +1,1 @@
-export { useSmarthomeWebsocket } from './use-smarthome-websocket/index'
+export { useSmarthomeWebsocket } from './use-smarthome/index'

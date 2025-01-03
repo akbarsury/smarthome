@@ -1,0 +1,1 @@
+export default defineWebSocketHandler((useSmarthome().webSocket('office').ws))

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="max-w-screen-md mx-auto">
     <div class="container">
       <div class="px-4 mt-2">
         <div class="bg-orange-200 rounded p-2 py-4">
@@ -28,12 +28,7 @@
 </template>
 
 <script setup lang="ts">
-// const { signOut: _signOut } = useAuth();
-const signOut = () => {
-  // _signOut({ redirect: false }).then(() => {
-  //   window.location.assign("/login");
-  // });
-};
+const signOut = () => {};
 </script>
 
 <style scoped></style>

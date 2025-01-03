@@ -7,7 +7,9 @@
         <Icon
           :name="props.icon"
           size="2.5rem"
-          :class="[status == 'on' ? 'text-green-700' : 'text-red-700']"
+          :class="[
+            props.currentStatus == 1 ? 'text-green-700' : 'text-red-700',
+          ]"
         />
       </div>
       <div class="w-[120px]">
@@ -34,45 +36,11 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  type: "switch" | "push";
   icon: string;
   name: string;
   label: string;
-  initialStatus?: "on" | "off";
-  pushTime?: number;
-  forceOn?: boolean;
-  forceOff?: boolean;
+  currentStatus: 0 | 1;
 }>();
-
-type ControlItemType = typeof props.type;
-type EmitActionReturn = {
-  message: string;
-};
-
-const emits = defineEmits<{
-  (e: "action", message: EmitActionReturn): void;
-  (e: "tes"): void;
-}>();
-
-const action = () => {
-  console.log("action click");
-
-  const { label } = props;
-  if (props.type == "switch") {
-    const messageData = { target: label };
-    emits("action", { message: JSON.stringify(messageData) });
-    return { message: JSON.stringify(messageData) };
-  } else {
-    const messageData = { target: label };
-    return { message: JSON.stringify(messageData) };
-  }
-};
-
-const status: globalThis.Ref<"on" | "off"> = ref("off");
-
-onMounted(() => {
-  status.value = props.initialStatus || status.value;
-});
 </script>
 
 <style scoped></style>

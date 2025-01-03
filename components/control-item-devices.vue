@@ -24,9 +24,8 @@
             v-for="controlledItem in controlledItems"
             :name="controlledItem.name"
             :label="controlledItem.label"
-            :type="controlledItem.type"
-            :icon="controlledItem.icon"
-            initial-status="on"
+            icon="controlledItem.icon"
+            :current-status="controlledItem['current-status']"
             @click.prevent="itemDeviceClick().show(controlledItem.label)"
             @action="() => {}"
           />
@@ -36,10 +35,11 @@
     <CompositeSelectedItemDevice
       v-if="
         $route.query['device'] &&
-        controlledItems?.length !== 0 &&
+        controlledItems &&
+        controlledItems.length !== 0 &&
         selectedItemDevice !== -111
       "
-      :selected-item-device="(selectedItemDevice as any) || undefined"
+      :selected-item-device="selectedItemDevice || undefined"
       @hide-selected-item-device="itemDeviceClick().hide()"
     />
   </div>
@@ -55,7 +55,16 @@ const props = defineProps<{
 const socket: globalThis.Ref<UseWebSocketReturn<any> | undefined> =
   ref(undefined);
 
-const controlledItems: globalThis.Ref<any[] | undefined> = ref(undefined);
+const controlledItems: globalThis.Ref<
+  | {
+      port: number;
+      name: string;
+      label: string;
+      "current-status": 1 | 0;
+      actions: { status: boolean; time?: number }[];
+    }[]
+  | undefined
+> = ref(undefined);
 
 const controlledItemsLoaded = computed(() =>
   controlledItems.value === undefined ? "skeleton-loader" : ""
@@ -63,7 +72,17 @@ const controlledItemsLoaded = computed(() =>
 
 const logMessages: globalThis.Ref<string[]> = ref([]);
 
-const selectedItemDevice: globalThis.Ref<{} | undefined> = ref(undefined);
+const selectedItemDevice: globalThis.Ref<
+  | {
+      port: number;
+      name: string;
+      label: string;
+      "current-status": 1 | 0;
+      actions: { status: boolean; time?: number }[];
+    }
+  | -111
+  | undefined
+> = ref(undefined);
 
 const itemDeviceClick = () => {
   const show = (itemLabel?: string) => {
@@ -102,7 +121,7 @@ onMounted(() => {
     `${useNitroOrigin()}/socket/control/${props.unitName}`,
     {
       onConnected: (ws) => {
-        ws.send("Client-init");
+        ws.send(JSON.stringify({ requestAction: "client-init" }));
       },
       onDisconnected: (ws) => {
         console.log(`ws disconnected: ${ws.url}`);
@@ -111,17 +130,11 @@ onMounted(() => {
       onMessage(ws, event) {
         if (typeof event.data === "string") {
           logMessages.value.push(event.data);
-          const data = useSmarthomeWebsocket().messageHandler(event.data);
+          const messageObject = JSON.parse(event.data);
+          if ((messageObject.responseType = "items-data")) {
+            console.log({ data: messageObject.data });
 
-          if (data) {
-            console.log(Object.keys(data));
-          }
-          if (
-            data &&
-            data?.type === "object" &&
-            data?.name == "controlledItems"
-          ) {
-            controlledItems.value = data.data as any[];
+            controlledItems.value = messageObject.data as any[];
           }
         }
       },

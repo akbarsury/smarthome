@@ -23,9 +23,17 @@
         <div class="mb-4">
           <span class="font-semibold"> Action </span>
         </div>
-        <div class="flex gap-4">
-          <button class="bg-blue-300 rounded p-1 px-2">Power</button>
-          <button class="bg-blue-300 rounded p-1 px-2">Restart</button>
+        <div class="flex flex-wrap gap-4">
+          <div
+            v-for="(action, actionIndex) in props.selectedItemDevice?.actions"
+          >
+            <button
+              :class="['capitalize bg-blue-300 rounded p-1 px-2']"
+              v-if="action.status"
+            >
+              {{ (actionsEnum[actionIndex], action.status) }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +43,11 @@
 <script setup lang="ts">
 const props = defineProps<{
   selectedItemDevice?: {
+    port: number;
     name: string;
+    label: string;
+    "current-status": 1 | 0;
+    actions: { status: boolean; time?: number }[];
   };
 }>();
 
@@ -43,6 +55,7 @@ const emits = defineEmits<{
   hideSelectedItemDevice: [];
 }>();
 
+const actionsEnum = ["turn on", "turn off", "reboot", "push"];
 const cssHideState = ref(true);
 
 const hideSelectedItemDevice = () => {
