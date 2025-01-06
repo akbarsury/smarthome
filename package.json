@@ -28,6 +28,7 @@
     "drizzle-orm": "^0.36.3",
     "firebase": "^11.1.0",
     "firebase-admin": "^13.0.1",
+    "next-auth": "4.21.1",
     "nuxt": "^3.14.1592",
     "pinia": "^2.3.0",
     "vue": "latest",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@iconify/json": "^2.2.281",
     "@nuxt/icon": "^1.10.1",
+    "@sidebase/nuxt-auth": "^0.10.0",
     "@types/node": "^22.9.1",
     "@vite-pwa/assets-generator": "^0.2.6",
     "autoprefixer": "^10.4.20",

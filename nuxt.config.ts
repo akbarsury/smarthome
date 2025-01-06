@@ -2,7 +2,7 @@ import { fileURLToPath } from "url";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: "2024-11-01",
   devtools: {
     enabled: true
   },
@@ -11,17 +11,21 @@ export default defineNuxtConfig({
       websocket: true,
       asyncContext: true
     },
+    devStorage: {
+      db: {
+        driver: "fs",
+        base: "./data-file/db"
+      }
+    }
   },
   devServer: {
     port: 6051
   },
-  extends: [
-    // '../api-auth'
-  ],
   runtimeConfig: {
-    authSecret: '123!0-21n',
-    authOrigin: 'http://localhost:3000',
+    authSecret: "123!0-21n",
+    smarthomeAuthOrigin: "http://localhost:3000",
     nodeCredential: "xxx",
+    firebaseApiKey: "xxx",
     public: {
       nodeSerialNumber: "xxx"
     }
@@ -34,17 +38,16 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@sidebase/nuxt-auth",
     "@vueuse/nuxt",
-    "nitro-cloudflare-dev",
   ],
   css: [
     fileURLToPath(new URL("./resources/styles/scss/main.scss", import.meta.url)).toString()
   ],
   app: {
     head: {
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1.0 minimum-scale=1.0 maximum-scale=5.0 user-scalable=false',
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1.0 minimum-scale=1.0 maximum-scale=5.0 user-scalable=false",
       htmlAttrs: {
-        lang: 'id-ID'
+        lang: "id-ID"
       },
       link: [
         {
@@ -81,6 +84,9 @@ export default defineNuxtConfig({
       ]
     }
   },
+  image: {
+    dir: "resources/images"
+  },
   vueuse: {},
   seo: {
     automaticDefaults: true,
@@ -94,28 +100,27 @@ export default defineNuxtConfig({
     },
   },
   icon: {
-
-    provider: 'iconify',
+    provider: "iconify",
     serverBundle: false,
-    clientBundle: {
-      icons: [
-        'mi:computer',
-        'cuida:lamp-outline',
-        'mingcute:speaker-line',
-        'uil:server'
-      ],
-    }
+    // clientBundle: {
+    //   icons: [
+    //     "mi:computer",
+    //     "cuida:lamp-outline",
+    //     "mingcute:speaker-line",
+    //     "uil:server"
+    //   ],
+    // }
   },
   site: {
-    url: 'http://akbar-smarthome.arahcloud.xyz/',
-    name: 'Akbar SmartHome',
-    description: 'Controling home from anywhere',
-    defaultLocale: 'id',
+    url: "http://akbar-smarthome.arahcloud.xyz/",
+    name: "Akbar SmartHome",
+    description: "Controling home from anywhere",
+    defaultLocale: "id",
     indexable: false,
   },
   pinia: {
     storesDirs: [
-      fileURLToPath(new URL('./resources/stores', import.meta.url)).toString(),
+      fileURLToPath(new URL("./resources/stores", import.meta.url)).toString(),
     ]
   },
   tailwindcss: {
@@ -126,15 +131,19 @@ export default defineNuxtConfig({
     viewer: true,
   },
   auth: {
-    isEnabled: false,
-    globalAppMiddleware: false,
-    disableServerSideAuth: true,
-    originEnvKey: "NUXT_AUTH_ORIGIN",
-    baseURL: `${process.env.NUXT_AUTH_ORIGIN}/api/v1.0/auth/`,
+    isEnabled: true,
+    globalAppMiddleware: {
+      isEnabled: true,
+      addDefaultCallbackUrl: false,
+      allow404WithoutAuth: true
+    },
+    disableServerSideAuth: false,
+    baseURL: process.env.NUXT_SMARTHOME_ORIGIN ? `${process.env.NUXT_SMARTHOME_ORIGIN}/auth` : '/auth',
     provider: {
-      type: 'authjs',
-      defaultProvider: "akbarSmarthomeAuthentication",
-      addDefaultCallbackUrl: true,
+      type: "authjs",
+      trustHost: true,
+      defaultProvider: "ArahSmarthomeCredentialProvider",
+      addDefaultCallbackUrl: false,
     },
     sessionRefresh: {
       enablePeriodically: 60000,

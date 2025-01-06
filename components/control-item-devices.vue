@@ -67,7 +67,7 @@ const controlledItems: globalThis.Ref<
 > = ref(undefined);
 
 const controlledItemsLoaded = computed(() =>
-  controlledItems.value === undefined ? "skeleton-loader" : ""
+  controlledItems.value === undefined ? "loader-skeleton-1" : ""
 );
 
 const logMessages: globalThis.Ref<string[]> = ref([]);

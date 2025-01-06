@@ -129,7 +129,6 @@ export class SmarthomeWebsocket {
 
         const clientMessageHandler = async (): Promise<string | undefined> => {
             switch (messageJson.requestAction) {
-                // Job::id::%{job_object_JSON}:
                 case 'Job':
                     server().handleJob();
                     return undefined

@@ -1,8 +1,10 @@
 import { app } from "./firebaseConfig"
 
 const firestore = app.firestore()
+const auth = app.auth()
 export const useFirebaseAdmin = {
-    firestore
+    firestore,
+    auth
 }
 
 export default useFirebaseAdmin

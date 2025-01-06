@@ -1,28 +1,5 @@
+@use "loader";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.skeleton-loader {
-    @apply relative bg-orange-200 rounded-lg overflow-hidden;
-    * {
-        opacity: 0;
-        pointer-events: none;
-        cursor: none;
-    }
-    &::before {
-        content: "";
-        opacity: 0.7;
-        @apply absolute h-[250%] w-[20rem] bg-gradient-to-r from-orange-200 via-orange-300 to-orange-200;
-        animation: skeleton-loader-keyframe ease-out 1.5s infinite;
-        -webkit-animation: skeleton-loader-keyframe ease-out 1.5s infinite;
-    }
-}
-
-@keyframes skeleton-loader-keyframe {
-0% {
-    left: -60%;
-}
-100% {
-    left: 100%;
-}
-}

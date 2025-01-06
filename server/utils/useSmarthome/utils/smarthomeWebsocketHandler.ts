@@ -3,18 +3,25 @@ import { SmarthomeWebsocket } from "./SmarthomeWebsocket"
 
 export const smarthomeWebsocketHandler = (SmarthomeWebsocket: SmarthomeWebsocket): Partial<Hooks> => {
     return {
-        upgrade(request) {
+        async upgrade(request) {
+            console.warn("[WS UPGRADE]");
+
             const unit = request.url.split("/").pop()
             if (unit)
                 SmarthomeWebsocket.updateUnit(unit)
+            return
         },
         async open(peer) {
             SmarthomeWebsocket.clientOpenConnection(peer);
             // 
-            console.log(`Client connection open: ${peer.id}`);
+            console.log(`Client connection open: ${peer.id} @ ${peer}`);
+            console.log(peer.websocket.url);
             // 
+            // console.log(new Date().toLocaleDateString());
+            // useStorage('db').setItem(`peer:${peer.id}.json`, { user: '', createdAt: new Date().getTime() })
         },
         async close(peer) {
+            // useStorage('db').removeItem(`peer:${peer.id}.json`)
             if (SmarthomeWebsocket.isNodePeer(peer)) {
                 SmarthomeWebsocket.nodeDisconnect().then(() => {
                     console.log(`Node connection close: ${peer.id}`);
