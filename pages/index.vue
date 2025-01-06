@@ -62,17 +62,16 @@ definePageMeta({
 });
 
 const auth = useAuth();
-if (
-  useAppConfig().resolvedOriginRouting === "app" &&
-  auth.status.value === "unauthenticated"
-) {
-  navigateTo({ name: "app-auth-signin" });
-} else if (
-  useAppConfig().resolvedOriginRouting === "app" &&
-  auth.status.value === "authenticated"
-) {
-  navigateTo({ name: "app-dashboard" });
-}
+onMounted(() => {
+  if (useAppConfig().resolvedOriginRouting === "app") {
+    switch (auth.status.value) {
+      case "unauthenticated":
+        navigateTo({ name: "app-auth-signin" });
+      case "authenticated":
+        navigateTo({ name: "app-dashboard" });
+    }
+  }
+});
 </script>
 
 <style scoped></style>

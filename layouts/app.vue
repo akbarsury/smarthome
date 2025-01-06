@@ -18,13 +18,9 @@
         <div class="bg-orange-200 rounded p-2 py-4">
           <div class="flex justify-between">
             <div>
-              <NuxtLink :to="{ name: 'home' }">
+              <NuxtLink :to="{ name: 'app-dashboard' }">
                 <h1 class="text-orange-700 text-2xl font-bold">
-                  Smarthome Control
-                  {{
-                    $route.name !== "home" &&
-                    !$route.name?.toString().startsWith("app-auth-")
-                  }}
+                  Smarthome Assistant
                 </h1>
               </NuxtLink>
             </div>
@@ -36,6 +32,14 @@
                     class="inline-block bg-green-300 hover:bg-green-400 border border-green-500 p-1 px-3 rounded"
                   >
                     Nodes
+                  </NuxtLink>
+                </div>
+                <div>
+                  <NuxtLink
+                    :to="{ name: 'app-dashboard-management' }"
+                    class="inline-block bg-green-300 hover:bg-green-400 border border-green-500 p-1 px-3 rounded"
+                  >
+                    Manajement
                   </NuxtLink>
                 </div>
                 <div>
