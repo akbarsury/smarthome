@@ -11,6 +11,11 @@ export default defineNuxtConfig({
       websocket: true,
       asyncContext: true
     },
+    storage: {
+      db: {
+        driver: "fs",
+      }
+    },
     devStorage: {
       db: {
         driver: "fs",
@@ -102,18 +107,10 @@ export default defineNuxtConfig({
   icon: {
     provider: "iconify",
     serverBundle: false,
-    // clientBundle: {
-    //   icons: [
-    //     "mi:computer",
-    //     "cuida:lamp-outline",
-    //     "mingcute:speaker-line",
-    //     "uil:server"
-    //   ],
-    // }
   },
   site: {
-    url: "http://akbar-smarthome.arahcloud.xyz/",
-    name: "Akbar SmartHome",
+    url: "http://your-url.xyz/",
+    name: "Arah SmartHome",
     description: "Controling home from anywhere",
     defaultLocale: "id",
     indexable: false,

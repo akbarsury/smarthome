@@ -24,7 +24,7 @@
         </ul>
       </div>
       <div
-        class="relative w-full overflow-hidden pl-2 ml-4 border-s border-orange-200"
+        class="relative overflow-hidden pl-2 ml-4 border-s border-orange-200"
       >
         <NuxtPage
           class="relative right-0 w-full h-full"
@@ -52,14 +52,10 @@ useIntervalFn(() => {
 }
 .expand-right-enter-active {
   transition: all 0.5s;
-  // transition-delay: 1s;
+  transition-delay: 0.5s;
 }
-.expand-right-leave-to {
-  position: absolute;
-  right: 100%;
-}
+.expand-right-leave-to,
 .expand-right-enter-from {
-  position: absolute;
-  right: 100%;
+  @apply absolute right-[110%];
 }
 </style>
