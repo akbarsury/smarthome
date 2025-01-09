@@ -1,1 +1,0 @@
-export { useSmarthomeWebsocket } from './use-smarthome/index'
