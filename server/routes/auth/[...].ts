@@ -1,6 +1,5 @@
 import CredentialsProvider, { CredentialInput } from 'next-auth/providers/credentials'
 import { NuxtAuthHandler } from '#auth'
-import { decryptToken } from '../../api/v1.0/auth/signin.post';
 import type { Account, Session, SessionStrategy, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
@@ -42,12 +41,12 @@ export default NuxtAuthHandler({
             try {
                 if (account?.provider === 'ArahSmarthomeCredentialProvider') {
                     const key = useRuntimeConfig().authSecret;
-                    const decryptedtoken = decryptToken(credentials?.token as string, key)
-                    const token = decryptedtoken.split(/[|]/)[1]
+                    const decryptedtoken = useSmarthome().encryption.decrypt(credentials?.token as string, key)
+                    const token = decryptedtoken?.split(/[|]/)[1] || undefined
                     const csrfToken: string | undefined = (credentials?.csrfToken as string)
-                    if (csrfToken && token === csrfToken) {
+                    if (decryptedtoken && csrfToken && token === csrfToken) {
                         const maybe_uid = decryptedtoken.split(/[|]/)[0]
-                        const { uid } = await useFirebaseAdmin.auth.getUser(maybe_uid)
+                        const { uid } = await useSmarthome().storage.auth.getUser(maybe_uid)
                         user.id = uid
                         return await Promise.resolve({ user, account }).then(() => true)
                     }
@@ -66,7 +65,7 @@ export default NuxtAuthHandler({
         }) => {
             console.warn(['SESSION', session.user?.email]);
             if (token.sub) {
-                const { uid, email, displayName } = await useFirebaseAdmin.auth.getUser(token.sub);
+                const { uid, email, displayName } = await useSmarthome().storage.auth.getUser(token.sub);
                 (session.user as ArahSmarthomeUser) = { id: "", email, username: email?.split('@')[0], name: displayName }
             }
             return Promise.resolve(session)

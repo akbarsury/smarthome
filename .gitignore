@@ -32,4 +32,4 @@ logs
 
 # Application
 data-file
-serviceAccount.ts
+service-account.json

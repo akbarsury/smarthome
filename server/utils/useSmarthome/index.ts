@@ -1,8 +1,14 @@
 import { useUnit, useUnitControlledItems } from './utils/controlledItems'
+import { default as _encryption } from './utils/encryption'
 import { SmarthomeWebsocket } from './utils/SmarthomeWebsocket'
 import { smarthomeWebsocketHandler } from './utils/smarthomeWebsocketHandler'
+import SmarthomeStorage from './utils/smarthomeStorage';
 
 const useSmarthome = () => {
+    const encryption = _encryption()
+
+    const storage = new SmarthomeStorage()
+
     const unit = () => {
         const get = async () => (await useUnit()).get()
         const validate = async (unitName: string) => (await useUnit()).validate(unitName)
@@ -19,7 +25,7 @@ const useSmarthome = () => {
         return { _data, ws }
     }
 
-    return { unit, getControlledItems, webSocket }
+    return { encryption, storage, unit, getControlledItems, webSocket }
 }
 
 export default useSmarthome

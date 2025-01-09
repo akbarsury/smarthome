@@ -1,4 +1,5 @@
 import { fileURLToPath } from "url";
+import SmarthomeStorage from './server/utils/useSmarthome/utils/smarthomeStorage';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -10,6 +11,11 @@ export default defineNuxtConfig({
     experimental: {
       websocket: true,
       asyncContext: true
+    },
+    storage: {
+      db: {
+        driver: "fs",
+      }
     },
     devStorage: {
       db: {
@@ -23,8 +29,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     authSecret: "123!0-21n",
-    smarthomeAuthOrigin: "http://localhost:3000",
-    nodeCredential: "xxx",
+    smarthomeOrigin: "http://localhost:3000",
+    SmarthomeCredential: "xxx",
     firebaseApiKey: "xxx",
     public: {
       nodeSerialNumber: "xxx"
@@ -102,18 +108,10 @@ export default defineNuxtConfig({
   icon: {
     provider: "iconify",
     serverBundle: false,
-    // clientBundle: {
-    //   icons: [
-    //     "mi:computer",
-    //     "cuida:lamp-outline",
-    //     "mingcute:speaker-line",
-    //     "uil:server"
-    //   ],
-    // }
   },
   site: {
-    url: "http://akbar-smarthome.arahcloud.xyz/",
-    name: "Akbar SmartHome",
+    url: "http://your-url.xyz/",
+    name: "Arah SmartHome",
     description: "Controling home from anywhere",
     defaultLocale: "id",
     indexable: false,

@@ -13,12 +13,8 @@ export const smarthomeWebsocketHandler = (SmarthomeWebsocket: SmarthomeWebsocket
         },
         async open(peer) {
             SmarthomeWebsocket.clientOpenConnection(peer);
-            // 
             console.log(`Client connection open: ${peer.id} @ ${peer}`);
             console.log(peer.websocket.url);
-            // 
-            // console.log(new Date().toLocaleDateString());
-            // useStorage('db').setItem(`peer:${peer.id}.json`, { user: '', createdAt: new Date().getTime() })
         },
         async close(peer) {
             // useStorage('db').removeItem(`peer:${peer.id}.json`)
