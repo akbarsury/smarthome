@@ -1,8 +1,7 @@
 import { getServerSession } from "#auth"
-type NewUser = {
-    email?: string
-    password?: string
-    name?: string
+
+type DeleteUser = {
+    id?: string
 }
 
 export default defineEventHandler(async (event) => {
@@ -10,22 +9,20 @@ export default defineEventHandler(async (event) => {
     const isSessionNotExpires = session ? new Date(session.expires).getTime() > new Date().getTime() : false
     if (!isSessionNotExpires) return setResponseStatus(event, 401, "Unauthorized")
     else {
-        const { email, password, name } = await readBody(event) as NewUser
-        if (!(email && password && name)) return setResponseStatus(event, 400, "Bad Request")
-        const user = await useSmarthome().storage.user().add({ email, password, name })
+        const { id } = await readBody(event) as DeleteUser
+        if (!id) return setResponseStatus(event, 400, "Bad Request")
+        const user = await useSmarthome().storage.user().remove(id)
         return user ? {
-            message: "Success create user",
+            message: "Success delete user",
             data: {
                 user: [user].map((user) => {
                     return {
-                        id: user.uid,
-                        email: user.email || null,
-                        name: user.displayName || null
+                        id
                     }
                 })[0]
             }
         } : {
-            message: "Failed create user",
+            message: "Failed delete user",
             data: { user: null }
         }
     }

@@ -1,4 +1,5 @@
 import { fileURLToPath } from "url";
+import SmarthomeStorage from './server/utils/useSmarthome/utils/smarthomeStorage';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -28,8 +29,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     authSecret: "123!0-21n",
-    smarthomeAuthOrigin: "http://localhost:3000",
-    nodeCredential: "xxx",
+    smarthomeOrigin: "http://localhost:3000",
+    SmarthomeCredential: "xxx",
     firebaseApiKey: "xxx",
     public: {
       nodeSerialNumber: "xxx"
